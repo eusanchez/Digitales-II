@@ -1,8 +1,7 @@
-timescale 1ns/1ns // escala de tiempo
+`timescale 1ns/1ns // escala de tiempo
 
-* Probador del registro de cuatro
-   bits
-   */
+/*Probador del registro de cuatro
+   bits*/
 module tester (
     output reg CLK,
     output reg ENB,
@@ -28,15 +27,34 @@ initial begin
     $display("ENB    MODO   D       Q    RCO");
 
     //primera instruccion 
-    ENB = 1'b1 //activo el enable por que quiero que este empieza a cambiar
+    ENB = 1'b1; //activo el enable por que quiero que este empieza a cambiar
     MODO = 2'b11;
     D[3:0] = 4'b0000;
-    RCO = 1'b0;
 
     //segunda y tercera instruccion
     /*Con esta se pretende enviar el flanco activo en CLK
     y establecer el MODO igual a  2'b00*/
     #1; #1;
-    MODO = 2'b00;
+    MODO = 2'b00; // Esta en 0000 para iniciar
 
+    // se envian 4 flancos de reloj, en teoria el estado deberia ser 0001
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
     
+    $finish;
+
+end
+endmodule

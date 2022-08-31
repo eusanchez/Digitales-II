@@ -3,9 +3,9 @@
 module contador (
     input CLK,
     input ENB,
-    input [1:0] MODO
-    input [3:0] D
-    output [3:0] Q
+    input [1:0] MODO,
+    input [3:0] D,
+    output [3:0] Q,
     output RCO 
 );
 
