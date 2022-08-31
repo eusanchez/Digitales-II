@@ -1,3 +1,4 @@
+
 /* flip flop tipo D de n bits disparado por flanco
    creciente de clk con entrada de habilitacion enb.
    */
