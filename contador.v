@@ -24,7 +24,14 @@ asi sucesivamente.
 always @* begin
     case (MODO[1:0])
     //   caso         valor de RCO     valor de D[3:0]
-        3'b00 : begin d_Out = 1'b0;  d_In = Q+1; /*aqui se puede meter lo del case*/end // CUENTA ASCENDENTE
+        3'b00 : begin d_Out = 1'b0;  d_In = Q+1; 
+        
+        case (Q[3:0])
+    //   caso 
+        4'b1111: begin d_Out = 1'b1; end
+        endcase 
+        
+        /*aqui se puede meter lo del case*/end // CUENTA ASCENDENTE
         3'b01 : begin d_Out = 1'b0;  d_In = Q-1; end // CUENTA DESCENDENTE
         3'b10 : begin d_Out = 1'b0;  d_In = Q-3; end // CUENTA DE TRES EN TRES HACIA ABAJO
         3'b11 : begin d_Out = 1'b1;  d_In = D; end // CARGA EN PARALELO
@@ -33,7 +40,7 @@ always @* begin
     /*case (Q[3:0])
     //   caso 
         4'b1111: begin d_Out = 1'b1; end
-    endcase 
+    endcase */
 end
 
 /*En esta seccion de codigo nombramos los ff hechos, donde se nombran luego de

@@ -64,7 +64,6 @@ initial begin
 
     //primera instruccion 
     ENB = 1'b1; //activo el enable por que quiero que este empieza a cambiar
-    //D[3:0] = 4'b0000;
     MODO = 2'b11;
     D[3:0] = 4'b0000;
 
@@ -73,6 +72,7 @@ initial begin
     y establecer el MODO igual a  2'b00*/
     #1; #1;
     MODO = 2'b01; // Esta en 0000 para iniciar
+
 
     // se envian 16 flancos de reloj
     #1; #1;
@@ -93,7 +93,86 @@ initial begin
     #1; #1; 
     #1; #1; //aqui ya muestra el llevo 
 
+    $display("\nPrueba #3: Cuenta de tres en tres hacia abajo");
+    $display("ENB   MODO   D        Q       RCO");
+
+    ENB = 1'b1;
+    MODO = 2'b01;
+    D[3:0] = 4'b0000;
+
+    #1;#1;
+    MODO = 2'b10;
+
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+
+    $display("\nPrueba #5: Carga en paralelo");
+    $display("ENB   MODO   D     Q    RCO");
+    // inciso 13.1
+    ENB = 1'b1;
+    MODO = 2'b10;
+    D[3:0] = 4'bxxxx;
+    #1; #1;
+
+    // inciso 13.2
+    D[3:0] = 4'b0000; 
+    #1; #1;
+
+    // inciso 13.3 
+    D[3:0] += 1'b1; 
+    #1; #1;
+
+    // inciso 13.4
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1;
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+    D[3:0] += 1'b1; 
+    #1; #1;
+
+    // inciso 14.1 (misma que el inciso 4.1)
+    D[3:0] = 4'bxxxx;
+    ENB = 1'b0;
+
+    // inciso 14.2 (misma que el inciso 4.2)
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    
+
     $finish;
+
 
 end
 endmodule
