@@ -23,7 +23,7 @@ end
 // Ejecucion de pruebas
 
 initial begin
-    $display("Prueba #1: Desplazamiento a la izquierda");
+    $display("Prueba #1: Cuenta ascendente");
     $display("ENB    MODO   D        Q       RCO");
 
     //primera instruccion 
@@ -64,6 +64,7 @@ initial begin
 
     //primera instruccion 
     ENB = 1'b1; //activo el enable por que quiero que este empieza a cambiar
+    //D[3:0] = 4'b0000;
     MODO = 2'b11;
     D[3:0] = 4'b0000;
 
@@ -81,7 +82,16 @@ initial begin
     #1; #1;
     #1; #1;
     #1; #1;
-
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1; 
+    #1; #1; //aqui ya muestra el llevo 
 
     $finish;
 
