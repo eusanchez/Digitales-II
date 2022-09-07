@@ -37,10 +37,6 @@ always @* begin
         2'b11 : begin d_Out = 1'b0;  d_In = D; end // CARGA EN PARALELO
         default: begin d_Out = d_Out; d_In = d_In; end // no cambiar los valores en otro caso.
     endcase
-    /*case (Q[3:0])
-    //   caso 
-        4'b1111: begin d_Out = 1'b1; end
-    endcase */
 end
 
 /*En esta seccion de codigo nombramos los ff hechos, donde se nombran luego de
@@ -78,20 +74,34 @@ reg d_Out4;
 always @* begin
     case (MODO[1:0])
     //   caso         valor de RCO     valor de D[3:0]
-        2'b00 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end //CUENTA ASCENDENTE
-        2'b01 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end // CUENTA DESCENDENTE
+        2'b00 : begin   
+    if (salida == 16'b0000_0000_0000_1111) begin
+            d_Out1 = 1'b1;
+        end else begin
+            d_Out1 = 1'b0;
+        end 
+         end//CUENTA ASCENDENTE
+        2'b01 : begin           
+        if (salida == 16'b0000_0000_0000_1111)
+            begin
+                d_Out1 = 1'b1;
+                //d_Out2 = 1'b1;
+                //d_Out3 = 1'b1;
+                //d_Out4 = 1'b1;
+        end else begin  
+            d_Out1 = 1'b0;
+        end   
+         end // CUENTA DESCENDENTE
         2'b10 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end // CUENTA DE TRES EN TRES HACIA ABAJO
         2'b11 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end // CARGA EN PARALELO
         //default: begin RCO= RCO162; end // no cambiar los valores en otro caso.
     endcase
 end 
 
-
 DFF_nbits_enb DFF_1bit1(.clk(CLK), .enb(ENB), .d(d_Out1), .q(RCO)); // Registro de 1bit para RCO
 DFF_nbits_enb DFF_1bit2(.clk(CLK), .enb(ENB), .d(d_Out2), .q(RCO162)); // Registro de 1bit para RCO
 DFF_nbits_enb DFF_1bit3(.clk(CLK), .enb(ENB), .d(d_Out3), .q(RCO163)); // Registro de 1bit para RCO
 DFF_nbits_enb DFF_1bit4(.clk(CLK), .enb(ENB), .d(d_Out4), .q(RCO164)); // Registro de 1bit para RCO
-
 
 contador contador1(.CLK(CLK),
  .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[3:0]), .Q(salida[3:0]),
@@ -108,6 +118,7 @@ contador contador3(.CLK(RCO162),
 contador contador4(.CLK(RCO163),
  .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[15:12]), .Q(salida[15:12]),
  .RCO(RCO164));
+
 
 
 endmodule

@@ -35,9 +35,9 @@ module tb;
     del registro en cada flanco
     activo de reloj
     */
-    always @(posedge clk) begin
+    /*always @(posedge clk) begin
         $display(" %b     %b     %b      %b   %b", enb, modo, D, Q, RCO);
-    end
+    end*/
 
 endmodule
 
@@ -51,21 +51,21 @@ module tb16;
 
     contador16 DUT16 (.CLK(clk), .ENB(enb),
                       .MODO(modo[1:0]), .entrada(D[15:0]), .salida(Q[15:0]),
-                      .RCO(RCO), .RCO162(RCO161), .RCO163(RCO163), .RCO164(RCO164));
+                      .RCO(RCO), .RCO162(RCO162), .RCO163(RCO163), .RCO164(RCO164));
 
     /* se instancia un probador
        */
     tester16 test16(.CLK(clk), .ENB(enb),
                 .MODO(modo[1:0]),.entrada(D[15:0]), .salida(Q[15:0]), 
-                .RCO(RCO), .RCO162(RCO161), .RCO163(RCO163), .RCO164(RCO164));
+                .RCO(RCO), .RCO162(RCO162), .RCO163(RCO163), .RCO164(RCO164));
 
 /* para generar las ondas y
     y visualizar en gtkwave
     */
-    initial begin
+    /*initial begin
         $dumpfile("testbench.vcd");
         $dumpvars;
-    end
+    end*/
 
     /* para mostrar (vvp) los valores
     de las entradas y salidas

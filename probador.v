@@ -22,7 +22,7 @@ end
 
 // Ejecucion de pruebas
 
-initial begin
+/*initial begin
     $display("Prueba #1: Cuenta ascendente");
     $display("ENB    MODO   D        Q       RCO");
 
@@ -34,14 +34,14 @@ initial begin
     //segunda y tercera instruccion
     /*Con esta se pretende enviar el flanco activo en CLK
     y establecer el MODO igual a  2'b00*/
-    #1; #1;
-    MODO = 2'b00; // Esta en 0000 para iniciar
+    //#1; #1;
+    //MODO = 2'b00; // Esta en 0000 para iniciar
 
     // se envian 16 flancos de reloj
     /*Para este caso es muy importante que tomemos en cuenta que el RCO no sera
     igual a 1, hasta que a 1111 no se le sume 1, en este caso ya tomaria el llevo
     y RCO = 1 */
-    #1; #1;
+    /*#1; #1;
     #1; #1;
     #1; #1;
     #1; #1;
@@ -70,11 +70,11 @@ initial begin
     //segunda y tercera instruccion
     /*Con esta se pretende enviar el flanco activo en CLK
     y establecer el MODO igual a  2'b00*/
-    #1; #1;
-    MODO = 2'b01; // Esta en 0000 para iniciar
+    //#1; #1;
+    //MODO = 2'b01; // Esta en 0000 para iniciar
 
     // se envian 16 flancos de reloj
-    #1; #1;
+    /*#1; #1;
     #1; #1;
     #1; #1;
     #1; #1;
@@ -162,11 +162,11 @@ initial begin
 
     #1; #1;
 
-    $finish;
+    #5 $finish;
 
 
-end
-endmodule
+end */
+endmodule 
 
 
 ////////////////////////////////////////////////////////
@@ -175,11 +175,11 @@ module tester16 (
     output reg ENB,
     output reg [1:0] MODO,
     output reg [15:0] entrada,
-    input [15:0] salida,
     input RCO,
     input RCO162,
     input RCO163,
-    input RCO164
+    input RCO164,
+    input [15:0] salida
 );
 
 /*Creacion del reloj, en este apartado de codigo se inicializa el reloj
@@ -193,7 +193,7 @@ end
 
 // Ejecucion de pruebas
 
-initial begin
+  initial begin
     $display("Prueba #1: Cuenta ascendente");
     $display("ENB    MODO   D        Q       RCO");
 
@@ -217,33 +217,18 @@ initial begin
     #1; #1;
     #1; #1;
     #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1; 
-    #1; #1; //aqui ya muestra el llevo 
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
-    #1; #1;
     #1; #1; 
     #1; #1;
-
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1; //
 
 
     $display("\nPrueba #2: Cuenta descendente");
@@ -258,6 +243,7 @@ initial begin
     /*Con esta se pretende enviar el flanco activo en CLK
     y establecer el MODO igual a  2'b00*/
     #1; #1;
+
     MODO = 2'b01; // Esta en 0000 para iniciar
 
     // se envian 16 flancos de reloj
@@ -265,7 +251,19 @@ initial begin
     #1; #1;
     #1; #1;
     #1; #1;
+    #1; #1; 
     #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+
 
     $display("\nPrueba #3: Cuenta de tres en tres hacia abajo");
     $display("ENB   MODO   D        Q       RCO");
@@ -309,13 +307,13 @@ initial begin
     entrada[15:0] += 1'b1;  
     #1; #1;
 
-    //D[3:0] = 4'bxxxx;
-   //ENB = 1'b0;
+    entrada[15:0] = 4'bxxxx;
+    ENB = 1'b0;
 
-    //#1; #1;
+    #1; #1;
 
-    $finish;
+    #5 $finish;
 
 
-end
+end 
 endmodule
