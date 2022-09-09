@@ -2,7 +2,7 @@
 /* flip flop tipo D de n bits disparado por flanco
    creciente de clk con entrada de habilitacion enb.
    */
-module DFF_nbits_enb #(parameter BITS = 1)
+module FF #(parameter BITS = 1)
 (
     input clk,
     input enb,

@@ -18,6 +18,10 @@ casos contiene al numero de modo, siendo por ejemplo:
 3'b00, refiriendose al MODO=00 donde en este caso ocurre Q+1, y
 asi sucesivamente. 
 */
+initial begin 
+    d_In = 4'b0000;
+end
+
 always @* begin
     case (MODO[1:0])
     //   caso         valor de RCO     valor de D[3:0]
@@ -25,16 +29,26 @@ always @* begin
             if (Q[3:0] == 4'b1111)
             begin 
                 d_Out = 1'b1; 
+            end else begin
+                d_Out = 1'b0;
             end
         end // CUENTA ASCENDENTE
         2'b01 : begin d_Out = 1'b0;  d_In = Q-1; 
             if (Q[3:0] == 4'b0000)
             begin
                 d_Out = 1'b1;
+            end else begin
+                d_Out = 1'b0;
             end
         end // CUENTA DESCENDENTE
         2'b10 : begin d_Out = 1'b0;  d_In = Q-3; end // CUENTA DE TRES EN TRES HACIA ABAJO
-        2'b11 : begin d_Out = 1'b0;  d_In = D; end // CARGA EN PARALELO
+        2'b11 : begin d_Out = 1'b0;  d_In = D; 
+            if (Q[3:0] == 4'b1111)
+            begin 
+                d_Out = 1; 
+            end else begin
+                d_Out = 1'b0;
+            end end // CARGA EN PARALELO
         default: begin d_Out = d_Out; d_In = d_In; end // no cambiar los valores en otro caso.
     endcase
 end
@@ -48,8 +62,8 @@ por lo que se veria de la siguiente manera: NOMBRE_MODULO etiqueta*/
 donde a lo que hace referencia es a 4 bits.*/
 
 
-DFF_nbits_enb #(.BITS(4)) DFF_4bits(.clk(CLK), .enb(ENB), .d(d_In[3:0]), .q(Q[3:0])); // Registro de 4bits para Q[3:0]
-DFF_nbits_enb DFF_1bit(.clk(CLK), .enb(ENB), .d(d_Out), .q(RCO)); // Registro de 1bit para RCO
+FF #(.BITS(4)) DFF_4bits(.clk(CLK), .enb(ENB), .d(d_In[3:0]), .q(Q[3:0])); // Registro de 4bits para Q[3:0]
+FF DFF_1bit(.clk(CLK), .enb(ENB), .d(d_Out), .q(RCO)); // Registro de 1bit para RCO
 
 endmodule
 
@@ -62,65 +76,211 @@ module contador16 (
     output RCO, 
     output RCO162, 
     output RCO163, 
-    output RCO164
+    output RCO164 
 
-);
+); 
 
 reg d_Out1;
 reg d_Out2;
 reg d_Out3;
 reg d_Out4;
 
+
+FF DFF_1bit1(.clk(CLK), .enb(ENB), .d(d_Out1), .q(RCO)); // Registro de 1bit para RCO */
+FF DFF_1bit2(.clk(CLK), .enb(ENB), .d(d_Out2), .q(RCO162)); // Registro de 1bit para RCO
+FF DFF_1bit3(.clk(CLK), .enb(ENB), .d(d_Out3), .q(RCO163)); // Registro de 1bit para RCO
+FF DFF_1bit4(.clk(CLK), .enb(ENB), .d(d_Out4), .q(RCO164)); // Registro de 1bit para RCO 
+
+contador contador1(
+    .CLK(CLK),
+    .ENB(ENB), 
+    .MODO(MODO[1:0]), 
+    .D(entrada[3:0]), 
+    .Q(salida[3:0]),
+    .RCO(RCO)
+);
+
+wire clk2;
+wire modo11;
+assign modo11 = (MODO == 2'b11);
+assign modo00 = (MODO == 2'b00);
+assign clk2 = CLK && modo11 || RCO && !modo11;
+
 always @* begin
-    case (MODO[1:0])
-    //   caso         valor de RCO     valor de D[3:0]
-        2'b00 : begin   
-    if (salida == 16'b0000_0000_0000_1111) begin
-            d_Out1 = 1'b1;
-        end else begin
-            d_Out1 = 1'b0;
-        end 
-         end//CUENTA ASCENDENTE
-        2'b01 : begin           
-        if (salida == 16'b0000_0000_0000_1111)
-            begin
-                d_Out1 = 1'b1;
-                //d_Out2 = 1'b1;
-                //d_Out3 = 1'b1;
-                //d_Out4 = 1'b1;
-        end else begin  
-            d_Out1 = 1'b0;
-        end   
-         end // CUENTA DESCENDENTE
-        2'b10 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end // CUENTA DE TRES EN TRES HACIA ABAJO
-        2'b11 : begin d_Out1 = 1'b1; d_Out2 = 1'b1; d_Out3 = 1'b1; d_Out4 = 1'b1;   end // CARGA EN PARALELO
-        //default: begin RCO= RCO162; end // no cambiar los valores en otro caso.
+
+    case(MODO[1:0]) 
+        2'b00: begin 
+            if (entrada[15:0] == 16'b1111_1111_1111_1111)
+                begin 
+                    d_Out1 = 1'b1;
+                end else begin
+                    d_Out1 = 1'b0; 
+                end
+            end
+     
+        2'b01: begin 
+            if (entrada[15:0] == 16'b0000_0000_0000_0000)
+                begin 
+                    d_Out1 = 1'b1;
+                end else begin
+                    d_Out1 = 1'b0; 
+                end
+            end
+
+        2'b10: begin 
+            if (entrada[15:0] == 16'b0000_0000_0000_0000 || entrada[15:0] == 16'b0000_0000_0000_0001 || entrada[15:0] == 16'b0000_0000_0000_0010 )
+                begin 
+                    d_Out1 = 1'b1;
+                end else begin
+                    d_Out1 = 1'b0; 
+                end
+            end
     endcase
-end 
+    end
 
-DFF_nbits_enb DFF_1bit1(.clk(CLK), .enb(ENB), .d(d_Out1), .q(RCO)); // Registro de 1bit para RCO
-DFF_nbits_enb DFF_1bit2(.clk(CLK), .enb(ENB), .d(d_Out2), .q(RCO162)); // Registro de 1bit para RCO
-DFF_nbits_enb DFF_1bit3(.clk(CLK), .enb(ENB), .d(d_Out3), .q(RCO163)); // Registro de 1bit para RCO
-DFF_nbits_enb DFF_1bit4(.clk(CLK), .enb(ENB), .d(d_Out4), .q(RCO164)); // Registro de 1bit para RCO
+contador contador2(
+    .CLK(clk2),
+    .ENB(ENB), 
+    .MODO(MODO[1:0]), 
+    .D(entrada[7:4]), 
+    .Q(salida[7:4]),
+    .RCO(RCO162)
+);
 
-contador contador1(.CLK(CLK),
- .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[3:0]), .Q(salida[3:0]),
- .RCO(RCO));
+wire clk3;
+wire modo113;
+assign modo113 = (MODO == 2'b11);
+assign clk3 = clk2 && modo113 || RCO162 && !modo113;
 
-contador contador2(.CLK(RCO),
- .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[7:4]), .Q(salida[7:4]),
- .RCO(RCO162));
+always @* begin
+    case(MODO[1:0]) 
+        2'b00: begin 
+                if (entrada[15:0] == 16'b1111_1111_1111_1111)
+                    begin 
+                        d_Out2 = 1'b1;
+                    end else begin
+                        d_Out2 = 1'b0; 
+                    end
 
-contador contador3(.CLK(RCO162),
- .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[11:8]), .Q(salida[11:8]),
- .RCO(RCO163));
+            end
+    2'b01: begin 
+            if (entrada[15:0] == 16'b0000_0000_0000_0000)
+                begin 
+                    d_Out2 = 1'b1;
+                end else begin
+                    d_Out2 = 1'b0; 
+                end
 
-contador contador4(.CLK(RCO163),
- .ENB(ENB), .MODO(MODO[1:0]), .D(entrada[15:12]), .Q(salida[15:12]),
- .RCO(RCO164));
+            end
+    2'b10: begin 
+            if (entrada[15:0] == 16'b0000_0000_0000_0000 || entrada[15:0] == 16'b0000_0000_0000_0001 || entrada[15:0] == 16'b0000_0000_0000_0010 )
+                begin 
+                    d_Out2 = 1'b1;
+                end else begin
+                    d_Out2 = 1'b0; 
+                end
+            end
+    endcase
+    end
 
 
+contador contador3(
+    .CLK(clk3),
+    .ENB(ENB), 
+    .MODO(MODO[1:0]), 
+    .D(entrada[11:8]), 
+    .Q(salida[11:8]),
+    .RCO(RCO163)
+);
 
+wire clk4;
+wire modo114;
+assign modo114 = (MODO == 2'b11);
+assign clk4 = clk3 && modo114 || RCO163 && !modo114;
+
+    always @* begin
+    case(MODO[1:0]) 
+        2'b00: begin 
+    
+            if (entrada[15:0] == 16'b1111_1111_1111_1111)
+                begin 
+                    d_Out3 = 1'b1;
+                end else begin
+                    d_Out3 = 1'b0; 
+                end
+
+                end
+     
+        2'b01: begin 
+
+            if (entrada[15:0] == 16'b0000_0000_0000_0000)
+                begin 
+                    d_Out3 = 1'b1;
+                end else begin
+                    d_Out3 = 1'b0; 
+                end
+
+                end
+
+        2'b10: begin 
+
+            if (entrada[15:0] == 16'b0000_0000_0000_0000 || entrada[15:0] == 16'b0000_0000_0000_0001 || entrada[15:0] == 16'b0000_0000_0000_0010 )
+                begin 
+                    d_Out3 = 1'b1;
+                end else begin
+                   d_Out3 = 1'b0; 
+                end
+
+                end
+
+    endcase
+
+    end
+
+contador contador4(
+    .CLK   (clk4),
+    .ENB   (ENB), 
+    .MODO  (MODO[1:0]), 
+    .D     (entrada[15:12]), 
+    .Q     (salida[15:12]),
+    .RCO   (RCO164)
+);
+
+/*always @* begin
+        case(MODO[1:0]) 
+        2'b00: begin 
+        
+            if (entrada[15:0] == 16'b1111_1111_1111_1111)
+                begin 
+                    d_Out4 = 1'b1;
+                end else begin
+                    d_Out4 = 1'b0; 
+                end
+    
+                end
+         
+        2'b01: begin 
+            if (entrada[15:0] == 16'b0000_0000_0000_0000)
+                begin 
+                    d_Out4 = 1'b1;
+                end else begin
+                    d_Out4 = 1'b0; 
+                end
+    
+        end
+    
+        2'b10: begin 
+            if (entrada[15:0] == 16'h0000 || entrada[15:0] == 16'b0000_0000_0000_0001 || entrada[15:0] == 16'b0000_0000_0000_0010 )
+                begin 
+                    d_Out4 = 1'b1;
+                end else begin
+                    d_Out4 = 1'b0; 
+                end
+            end
+    
+        endcase
+
+        end*/
 endmodule
 
 

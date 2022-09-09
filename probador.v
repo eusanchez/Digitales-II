@@ -172,12 +172,12 @@ endmodule
 ////////////////////////////////////////////////////////
 module tester16 (
     output reg CLK,
-    output reg ENB,
+    output reg ENB, 
     output reg [1:0] MODO,
     output reg [15:0] entrada,
     input RCO,
     input RCO162,
-    input RCO163,
+    input RCO163, 
     input RCO164,
     input [15:0] salida
 );
@@ -199,20 +199,17 @@ end
 
     //primera instruccion 
     ENB = 1'b1; //activo el enable por que quiero que este empieza a cambiar
-    entrada[15:0] = 16'b0000_0000_0000_0000;
+    entrada[15:0] = 16'h0000;
     MODO = 2'b11;
-    entrada[15:0] = 16'b0000_0000_0000_0000;
+    entrada[15:0] = 16'h0000;
 
     //segunda y tercera instruccion
-    /*Con esta se pretende enviar el flanco activo en CLK
-    y establecer el MODO igual a  2'b00*/
+    //Con esta se pretende enviar el flanco activo en CLK y establecer el MODO igual a  2'b00
     #1; #1;
     MODO = 2'b00; // Esta en 0000 para iniciar
 
     // se envian 16 flancos de reloj
-    /*Para este caso es muy importante que tomemos en cuenta que el RCO no sera
-    igual a 1, hasta que a 1111 no se le sume 1, en este caso ya tomaria el llevo
-    y RCO = 1 */
+    /*Para este caso es muy importante que tomemos en cuenta que el RCO no sera igual a 1, hasta que a 1111 no se le sume 1, en este caso ya tomaria el llevo y RCO = 1 */
     #1; #1;
     #1; #1;
     #1; #1;
@@ -229,15 +226,21 @@ end
     #1; #1;
     #1; #1;
     #1; #1; //
-
-
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+///////////////////////_ CUENTA DESCENDENTE 16BITS _///////////////////////////////////////
     $display("\nPrueba #2: Cuenta descendente");
     $display("ENB   MODO   D        Q       RCO");
 
     //primera instruccion 
     ENB = 1'b1; //activo el enable por que quiero que este empieza a cambiar
     MODO = 2'b11;
-    entrada[15:0] = 16'b1111_1111_1111_1111; //Inicio en 1111
+    entrada[15:0] = 16'hffff; 
 
     //segunda y tercera instruccion
     /*Con esta se pretende enviar el flanco activo en CLK
@@ -264,13 +267,15 @@ end
     #1; #1;
     #1; #1;
 
-
+///////////////////////_ CUENTA DE TRES EN TRES HACIA ABAJO 16BITS _///////////////////////////////////////
     $display("\nPrueba #3: Cuenta de tres en tres hacia abajo");
     $display("ENB   MODO   D        Q       RCO");
 
+     #1; #1;
     ENB = 1'b1;
-    MODO = 2'b01;
-    entrada[15:0] = 16'b0000_0000_0000_0000;
+    MODO = 2'b11;
+    entrada[15:0] = 16'hffff;
+
 
     #1;#1;
     MODO = 2'b10;
@@ -280,17 +285,34 @@ end
     #1; #1;
     #1; #1;
     #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
+    #1; #1;
 
 
-    $display("\nPrueba #5: Carga en paralelo");
+
+
+   $display("\nPrueba #5: Carga en paralelo");
     $display("ENB   MODO   D     Q       RCO");
 
     ENB = 1'b1;
     MODO = 2'b11;
-    entrada[15:0] = 16'bxxxx_xxxx_xxxx_xxxx;
+    entrada[15:0] = 16'hxxxx;
     #1; #1;
 
-    entrada[15:0] = 16'b0000_0000_0000_0000; 
+    entrada[15:0] = 16'h0000; 
     #1; #1;
 
     entrada[15:0] += 1'b1; 
@@ -306,13 +328,38 @@ end
     #1; #1;
     entrada[15:0] += 1'b1;  
     #1; #1;
-
-    entrada[15:0] = 4'bxxxx;
-    ENB = 1'b0;
-
+    entrada[15:0] += 1'b1;  
     #1; #1;
+    entrada[15:0] += 1'b1; 
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1; 
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1; 
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1;  
+    #1; #1;
+    entrada[15:0] += 1'b1;  
 
-    #5 $finish;
+
+    //entrada[15:0] = 16'hxxxx;
+    //ENB = 1'b0;
+
+    //#1; #1; 
+
+    #2 $finish;
+
 
 
 end 
