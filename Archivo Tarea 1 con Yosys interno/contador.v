@@ -73,6 +73,7 @@ FF DFF_1bit(.CLK(CLK), .EN(ENB), .D(d_Out), .Q(RCO)); // Registro de 1bit para R
 
 endmodule
 
+
 module contador16 (
     input CLK,
     input ENB,
@@ -104,7 +105,7 @@ assign modo11 = (MODO == 2'b11);
 assign modo00 = (MODO == 2'b00);
 assign clk2 = CLK && modo11 || RCO && !modo11;
 
-/*always @* begin
+always @* begin
 
     case(MODO[1:0]) 
         2'b00: begin 
@@ -134,7 +135,7 @@ assign clk2 = CLK && modo11 || RCO && !modo11;
                 end
             end
     endcase
-    end*/
+    end
 
 contador contador2(
     .CLK(clk2),
@@ -243,5 +244,3 @@ contador contador4(
 );
 
 endmodule
-
-
