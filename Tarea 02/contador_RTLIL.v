@@ -257,7 +257,7 @@ endmodule
 
 (* top =  1  *)
 (* src = "contador.v:77" *)
-module contador16(CLK, ENB, MODO, entrada, salida, RCO, RCO162, RCO163, RCO164);
+module contador_RTLIL(CLK, ENB, MODO, entrada, salida, RCO, RCO162, RCO163, RCO164);
   wire [1:0] _00_;
   wire _01_;
   (* src = "contador.v:106" *)
