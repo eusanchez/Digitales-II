@@ -1,10 +1,10 @@
 `include "contador_delay.v"
-`include "probador_delay.v"
+`include "probador.v"
 `include "cmos_cell_delay.v"
 
 
 // Banco de pruebas para el registro de cuatro bits y el probador
-module tb_delay;
+module tb;
     wire clk, enb, RCO;
     wire [1:0] modo;
     wire [3:0] D; 
@@ -47,7 +47,7 @@ module tb_delay;
 endmodule
 
 
-module tb16_delay;
+module tb16;
     wire clk, enb, RCO, RCO162, RCO163, RCO164;
     wire [1:0] modo;
     wire [15:0] D; 
