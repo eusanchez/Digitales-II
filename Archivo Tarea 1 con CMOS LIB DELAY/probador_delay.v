@@ -2,7 +2,7 @@
 
 /*Probador del registro de cuatro
    bits*/
-module tester_delay (
+module tester (
     output reg CLK,
     output reg ENB,
     output reg [1:0] MODO,
@@ -178,7 +178,7 @@ endmodule
 
 
 ////////////////////////////////////////////////////////
-module tester16_delay (
+module tester16 (
     output reg CLK,
     output reg ENB, 
     output reg [1:0] MODO,
