@@ -19,28 +19,28 @@ end
 
 // Pone todos los registros en cero
 initial begin
-    // Prueba 1: reiniciar los registros y salidas
-    RESET = 1'b0; #1; #1; // 2 ciclos completos de reloj con reset en cero.
-    #1; #1; #1; // 3 ciclos de reloj completos
-    RESET = 1'b1; #1; #1; // 2 ciclos completos de reloj con reset en uno.
+    // Prueba 1: RESET
+    RESET = 1'b0; #2; // 2 ciclos completos de reloj con reset en cero.
+    #3; // 3 ciclos de reloj completos
+    RESET = 1'b1; #2; // 2 ciclos completos de reloj con reset en uno.
 end
 
 //Instrucciones para el generador de transacciones
 initial begin
     MDIO_START = 1'b0;
 
-    // Prueba 2: Palabra que no cumple con ST = 01 (start of frame)
-    T_DATA = 32'h1A3B07E4; #1; #1; // primera palabra
+    // Prueba 2: Violacion de ST = 01 (start of frame)
+    T_DATA = 32'h1A3B07A4; #1; #1; // primera palabra
     #8;
 
-    MDIO_START = 1'b1; #1; #1; // pulso MDIO_START: indica el inicio de transmisión de datos
-    MDIO_START = 1'b0; #1; #1; T_DATA = 32'hCAFECAFE;// se cambia T_DATA durante la transmisión de datos
+    MDIO_START = 1'b1; #2; // pulso MDIO_START, inicio de transmision
+    MDIO_START = 1'b0; #2; T_DATA = 32'hCAFECAFE;// se cambia T_DATA durante la transmisión de datos
     
     #8; // 8 ciclos de reloj completos
     #8; // 8 ciclos de reloj completos
 
-    MDIO_START = 1'b1; #1; #1;  // pulso MDIO_START durante
-    MDIO_START = 1'b0; #1; #1;  // la transmisión de datos
+    MDIO_START = 1'b1; #2;  // pulso MDIO_START durante
+    MDIO_START = 1'b0; #2;  // la transmisión de datos
 
     #8; // 8 ciclos de reloj completos
     #8; // 8 ciclos de reloj completos
@@ -48,8 +48,8 @@ initial begin
     // Prueba 3: lectura
     T_DATA = 32'h6A3BC69F; // segunda palabra
 
-    MDIO_START = 1'b1; #1; #1; // pulso MDIO_START: indica el inicio de transmisión de datos
-    MDIO_START = 1'b0; #1; #1;
+    MDIO_START = 1'b1; #2; // pulso MDIO_START: indica el inicio de transmisión de datos
+    MDIO_START = 1'b0; #2;
 
 
     #1; #1; #1; #1; 
@@ -85,97 +85,94 @@ initial begin
     MDIO_START = 1'b0; #1; #1;
 end
 
-/*  Valores "aleatorios" de
-    MDIO_IN.
-*/
+//Valores para MDIO_IN
 initial begin
-    MDIO_IN = 1'b1; #1; #1; #1; #1; 
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1; 
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;    
-    MDIO_IN = 1'b0; #1; #1; #1; #1; 
-    MDIO_IN = 1'b0; #1; #1; #1; #1; 
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b0; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
-    MDIO_IN = 1'b1; #1; #1; #1; #1;
+    MDIO_IN = 1'b1; #4; 
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;   
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+    MDIO_IN = 1'b1; #4;
+    MDIO_IN = 1'b0; #4;
+
 
 
     $finish;

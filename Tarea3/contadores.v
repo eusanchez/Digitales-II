@@ -1,6 +1,6 @@
 // Contador de 2 bits para la senal de MCD
 
-module contador_2 (
+module contador2 (
 input CLK,
 input RESET,
 output reg RESULT
@@ -16,7 +16,7 @@ always @(posedge CLK) begin
 end
 endmodule
 
-module contador_32 (
+module contador32 (
     input CLK,
     input RESET,
     input ENB,
@@ -25,11 +25,13 @@ module contador_32 (
 
 always @(posedge CLK) begin
     if (~RESET || RESULT == 5'd31)  //5'd31 = 5'b11111
-        RESULT <= 1'b0;
+        RESULT <= 0;
     else 
         RESULT <= 1'b1;
     if (ENB && RESULT != 5'd31)
-        RESULT <= RESULT + 1'b1;       
+        RESULT <= RESULT + 1'b1;
+    else
+        RESULT <= 0;       
 end
 
 
