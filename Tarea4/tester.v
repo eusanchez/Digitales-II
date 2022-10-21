@@ -40,7 +40,7 @@ initial begin
     WR_DATA = 16'b1010_1000_0000_0001;
     RNW = 1'b1; #4; 
     START_STB = 0;
-    #90;
+    #250;
     //WR_DATA = 16'b1000_0101_1010_0011; // segunda palabra
     #100; 
 
@@ -52,13 +52,13 @@ initial begin
     START_STB = 1'b1; #2;
     //START_STB = 1'b0; #2;
     IC2_ADDR = 7'b1010010;
-    RNW = 1'b0; #4;
+    RNW = 1'b0; #100;
     START_STB = 0;
-    SDA_IN = 1; #5;
-    SDA_IN = 0; #5;
-    SDA_IN = 1; #5;
-    SDA_IN = 1; #5;
-    SDA_IN = 0; #5;
+    SDA_IN = 1; #10;
+    SDA_IN = 0; #10;
+    SDA_IN = 1; #10;
+    SDA_IN = 1; #10;
+    SDA_IN = 0; #10;
     SDA_IN = 1; #5;
     SDA_IN = 0; #5;
     SDA_IN = 1; #5;
@@ -70,7 +70,7 @@ initial begin
     SDA_IN = 1; #5;
     SDA_IN = 0; #5;
     //START_STB = 0;
-    #90;
+    #100;
     //WR_DATA = 16'b1000_0101_1010_0011; // segunda palabra
     #60; #8;
     #8; 

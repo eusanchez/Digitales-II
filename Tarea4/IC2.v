@@ -34,9 +34,11 @@ contador2 frecuencia_al_25 (
 reg [7:0] D;
 reg [15:0] WR;
 
+
 //Indica la iniciacion de un metodo de escritura o lectura
 reg start_transmission;
 reg start_data;
+
 
 //Indica cuantos bits de datos se han transmitido a S_OUT
 wire [4:0] contador;
@@ -59,8 +61,8 @@ always @(posedge CLK) begin
         RD_DATA[15:0] <= 0;
         start_data <= 0;
      end
-     //else if (start_data) begin
-     //end
+     else if (start_data) begin
+     end
 end
 
 always @(posedge SCL) begin
@@ -110,14 +112,14 @@ always @(posedge SCL) begin
                     SDA_OE <= 1'b1;   
                     SDA_OUT <= WR[15];
                     WR = WR << 1;
-                    //RD_DATA = 0;
+                    RD_DATA = 0;
                 end
                 //LECTURA
                 1'b0:  begin
                     if (contador > 5'd9) begin
                     SDA_OE <= 1'b0;     
-                    RD_DATA[15:0] <= SDA_IN;  
-                    RD_DATA = RD_DATA >> 1;
+                    RD_DATA[0] <= SDA_IN;  
+                    RD_DATA = RD_DATA << 1;
                     SDA_OUT = 0;
                 end   
                 end          
