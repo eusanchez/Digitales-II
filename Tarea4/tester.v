@@ -1,14 +1,15 @@
 module tester (
-    input MDC,
-    input MDIO_OE,
-    input MDIO_OUT,
-    input DATA_RDY,
+    input SCL,
+    input SDA_OE,
+    input SDA_OUT,
     input [15:0] RD_DATA,
     output reg CLK,
     output reg RESET,
-    output reg MDIO_IN,
-    output reg MDIO_START,
-    output reg [31:0] T_DATA
+    output reg SDA_IN,
+    output reg [6:0] IC2_ADDR,
+    output reg RNW,
+    output reg START_STB,
+    output reg [15:0] WR_DATA
 );
 
 //Creacion del reloj
@@ -18,164 +19,68 @@ always begin
 end
 
 // Pone todos los registros en cero
-initial begin
-    // Prueba 1: RESET
-    RESET = 1'b0; #2; // 2 ciclos completos de reloj con reset en cero.
-    #3; // 3 ciclos de reloj completos
-    RESET = 1'b1; #2; // 2 ciclos completos de reloj con reset en uno.
+initial begin 
+    RESET = 1'b0; #2; 
+    #3;
+    RESET = 1'b1; #2;
 end
+
 
 //Instrucciones para el generador de transacciones
 initial begin
-    MDIO_START = 1'b0;
 
-    // Prueba 2: Violacion de ST = 01 (start of frame)
-    T_DATA = 32'h1A3B07A4; #1; #1; // primera palabra
-    #8;
-
-    MDIO_START = 1'b1; #2; // pulso MDIO_START, inicio de transmision
-    MDIO_START = 1'b0; #2; T_DATA = 32'hCAFECAFE;// se cambia T_DATA durante la transmisión de datos
-    
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-
-    MDIO_START = 1'b1; #2;  // pulso MDIO_START durante
-    MDIO_START = 1'b0; #2;  // la transmisión de datos
-
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-
-    // Prueba 3: lectura
-    T_DATA = 32'h6A3BC69F; // segunda palabra
-
-    MDIO_START = 1'b1; #2; // pulso MDIO_START: indica el inicio de transmisión de datos
-    MDIO_START = 1'b0; #2;
+  
+    //PRUEBA DE ESCRITURA
+    SDA_IN = 1'b1; #2;
+    SDA_IN = 0; #2;
+    START_STB = 1'b0; #2;
+    START_STB = 1'b1; #2;
+    //START_STB = 1'b0; #2;
+    IC2_ADDR = 7'b1010010;
+    WR_DATA = 16'b1010_1000_0000_0001;
+    RNW = 1'b1; #4; 
+    START_STB = 0;
+    #90;
+    //WR_DATA = 16'b1000_0101_1010_0011; // segunda palabra
+    #100; 
 
 
-    #1; #1; #1; #1; 
-    
-    T_DATA = 32'hCAFECAFE; // se cambia T_DATA durante la transmisión de datos
-    
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #4;
-    
-    MDIO_START = 1'b1; #1; #1;  // pulso MDIO_START durante
-    MDIO_START = 1'b0; #1; #1;  // la transmisión de datos
+    //RUEBA DE LECTURA
+    RESET = 0; #2;
+    RESET = 1'b1; #2;
+    //SDA_IN = 1; #1;
+    START_STB = 1'b1; #2;
+    //START_STB = 1'b0; #2;
+    IC2_ADDR = 7'b1010010;
+    RNW = 1'b0; #4;
+    START_STB = 0;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 1; #5;
+    SDA_IN = 0; #5;
+    //START_STB = 0;
+    #90;
+    //WR_DATA = 16'b1000_0101_1010_0011; // segunda palabra
+    #60; #8;
+    #8; 
+    #100;
 
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8; // 8 ciclos de reloj completos
-    #8;
-
-    // Prueba 4: escritura
-    T_DATA = 32'h5A3B07E4; // tercera palabra
-    #1; #1; #1; #1;
-
-    MDIO_START = 1'b1; #1; #1; // pulso MDIO_START: indica el inicio de transmisión de datos
-    MDIO_START = 1'b0; #1; #1;
-end
-
-//Valores para MDIO_IN
-initial begin
-    MDIO_IN = 1'b1; #4; 
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;   
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
-    MDIO_IN = 1'b1; #4;
-    MDIO_IN = 1'b0; #4;
 
 
 
     $finish;
+
 end
 
 endmodule

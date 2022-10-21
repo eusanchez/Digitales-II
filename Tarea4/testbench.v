@@ -1,38 +1,41 @@
-`include "MDIO.v"
+`include "IC2.v"
 `include "tester.v"
 
 
 //TESTBENCH
 module testbench;
-wire clk, rst, mdio_in, mdio_start, mdc, mdio_oe, mdio_out, data_rdy;
-wire [31:0] t_data;
+wire clk, rst, sda_in, start_stb, rnw, scl, sda_oe, sda_out;
+wire[6:0] i2c_addr;
+wire [15:0] wr_data;
 wire [15:0] rd_data; 
 
 //DUT
-MDIO MDIO_DUT (
+IC2 IC2_DUT (
     .CLK(clk),
     .RESET(rst),
-    .MDIO_IN(mdio_in),
-    .MDIO_START(mdio_start),
-    .T_DATA(t_data[31:0]),
-    .MDC(mdc),
-    .MDIO_OE(mdio_oe),
-    .MDIO_OUT(mdio_out),
-    .DATA_RDY(data_rdy),
-    .RD_DATA(rd_data)
+    .SDA_IN(sda_in),
+    .RNW(rnw),
+    .START_STB(start_stb),
+    .IC2_ADDR(i2c_addr[6:0]),
+    .WR_DATA(wr_data[15:0]),
+    .SCL(scl),
+    .SDA_OE(sda_oe),
+    .SDA_OUT(sda_out),
+    .RD_DATA(rd_data[15:0])
 );
 
 //TESTER
 tester TESTER (
     .CLK(clk),
     .RESET(rst),
-    .MDIO_IN(mdio_in),
-    .MDIO_START(mdio_start),
-    .T_DATA(t_data[31:0]),
-    .MDC(mdc),
-    .MDIO_OE(mdio_oe),
-    .MDIO_OUT(mdio_out),
-    .DATA_RDY(data_rdy),
+    .SDA_IN(sda_in),
+    .RNW(rnw),
+    .START_STB(start_stb),
+    .IC2_ADDR(i2c_addr[6:0]),
+    .WR_DATA(wr_data[15:0]),
+    .SCL(scl),
+    .SDA_OE(sda_oe),
+    .SDA_OUT(sda_out),
     .RD_DATA(rd_data)
 );
 
