@@ -1,52 +1,48 @@
-`include "IC2.v"
+`include "I2C.v"
 `include "tester.v"
 
+module testbench();
 
-//TESTBENCH
-module testbench;
-wire clk, rst, sda_in, start_stb, rnw, scl, sda_oe, sda_out;
-wire[6:0] i2c_addr;
-wire [15:0] wr_data;
-wire [15:0] rd_data; 
+    wire SCL;
+    wire SDA_OE;
+    wire SDA_OUT;
+    wire [15:0] RD_DATA;
+    wire [15:0] WR_DATA;
+    wire START_STB;
+    wire [6:0]I2C_ADDR;
+    wire CLK;
+    wire RST;
+    wire SDA_IN;
+    wire RNW;
 
-//DUT
-IC2 IC2_DUT (
-    .CLK(clk),
-    .RESET(rst),
-    .SDA_IN(sda_in),
-    .RNW(rnw),
-    .START_STB(start_stb),
-    .IC2_ADDR(i2c_addr[6:0]),
-    .WR_DATA(wr_data[15:0]),
-    .SCL(scl),
-    .SDA_OE(sda_oe),
-    .SDA_OUT(sda_out),
-    .RD_DATA(rd_data[15:0])
-);
+        I2C DUT(.SCL(SCL), 
+                    .SDA_OE(SDA_OE), 
+                    .SDA_OUT(SDA_OUT), 
+                    .RD_DATA(RD_DATA), 
+                    .WR_DATA(WR_DATA), 
+                    .START_STB(START_STB), 
+                    .I2C_ADDR(I2C_ADDR), 
+                    .RNW(RNW), 
+                    .CLK(CLK), 
+                    .RST(RST), 
+                    .SDA_IN(SDA_IN));
 
-//TESTER
-tester TESTER (
-    .CLK(clk),
-    .RESET(rst),
-    .SDA_IN(sda_in),
-    .RNW(rnw),
-    .START_STB(start_stb),
-    .IC2_ADDR(i2c_addr[6:0]),
-    .WR_DATA(wr_data[15:0]),
-    .SCL(scl),
-    .SDA_OE(sda_oe),
-    .SDA_OUT(sda_out),
-    .RD_DATA(rd_data)
-);
+    tester TESTER (.SCL(SCL), 
+                    .SDA_OE(SDA_OE), 
+                    .SDA_OUT(SDA_OUT), 
+                    .RD_DATA(RD_DATA),
+                    .WR_DATA(WR_DATA), 
+                    .START_STB(START_STB), 
+                    .I2C_ADDR(I2C_ADDR), 
+                    .RNW(RNW), 
+                    .CLK(CLK), 
+                    .RST(RST), 
+                    .SDA_IN(SDA_IN));
 
-
-/* para generar las ondas y
-y visualizar en gtkwave
-*/
-initial begin
-    $dumpfile("testbench.vcd");
-    $dumpvars;
-end
+    initial begin
+        $dumpfile("testbench.vcd");
+        $dumpvars;
+    end
 
 
 endmodule
